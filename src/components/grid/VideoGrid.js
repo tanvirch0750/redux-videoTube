@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchVideos } from '../../features/videos/videosSlice';
+import Error from '../ui/Error';
 import Loading from '../ui/Loading';
 import VideoGridItem from './VideoGridItem';
 
@@ -14,14 +15,14 @@ const VideoGrid = () => {
     dispatch(fetchVideos());
   }, [dispatch]);
 
+  // decide what to render
   let content;
   if (isLoading) content = <Loading />;
 
-  if (!isLoading && isError)
-    content = <div className="col-span-12">{error}</div>;
+  if (!isLoading && isError) content = <Error message={error} />;
 
   if (!isLoading && !isError && videos?.length === 0)
-    content = <div className="col-span-12">Videos not found</div>;
+    content = <Error message="Videos not found" />;
 
   if (!isLoading && !isError && videos?.length > 0)
     content = videos.map((video) => (
